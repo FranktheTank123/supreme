@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import json
 import time
+from tqdm import tqdm
 import sys
 
 
@@ -14,6 +15,12 @@ def contains(name, name_list):
 
 def filter_names(new_inventory, name_list):
     return {k: v for k, v in new_inventory.iteritems() if contains(v, name_list)}
+
+def sleep(sec):
+    sec = int(sec)
+    for _ in tqdm(range(sec), desc='Sleep for {} seconds:'.format(sec)):
+        time.sleep(1)
+
 
 if __name__ == '__main__':
     # load data
@@ -37,7 +44,7 @@ if __name__ == '__main__':
     si = SupremeItemsMonitor(inventory)
     new_inventory = si.monitor(sleep=0.5, max_count=-1)
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
-        time.sleep(20)
+        sleep(10)
     print("Found {} new items.".format(len(new_inventory)))
 
     # filter what we want
@@ -50,4 +57,4 @@ if __name__ == '__main__':
     lst = new_inventory.keys()
     ss.shop(lst)
 
-    time.sleep(sleep_time)
+    sleep(sleep_time)
