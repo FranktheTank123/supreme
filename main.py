@@ -32,8 +32,12 @@ if __name__ == '__main__':
         name_list = ['cactus keychain', 'rimowa']
 
     # get refreshed items every 0.5 secs
+    ss = SupremeShopper()
+    ss.recaptcha()
     si = SupremeItemsMonitor(inventory)
     new_inventory = si.monitor(sleep=0.5, max_count=-1)
+    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+        time.sleep(20)
     print("Found {} new items.".format(len(new_inventory)))
 
     # filter what we want
@@ -44,7 +48,6 @@ if __name__ == '__main__':
 
     # place order
     lst = new_inventory.keys()
-    ss = SupremeShopper()
     ss.shop(lst)
 
     time.sleep(sleep_time)

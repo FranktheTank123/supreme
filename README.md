@@ -22,4 +22,5 @@ scrapy crawl supreme -o 'supreme.json'
 ## 1-click shop
 
 - follow `config.info_template.py` to create `config.info.py`.
-- `python -i main.py test`
+- for testing: `python -i main.py test`
+- for real: `python -i main.py`, make sure run at least 1min before the drop, so that you can handle `reCAPTCHA` yourself

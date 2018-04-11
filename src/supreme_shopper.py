@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import time
 import sys
 
@@ -8,12 +9,25 @@ from src.config_loader import ConfigLoader
 
 class SupremeShopper(object):
     def __init__(self):
-        self._checkout_url = 'http://www.supremenewyork.com/checkout'
-        self._home_page = 'http://www.supremenewyork.com/shop/all'
+        self._checkout_url = 'https://www.supremenewyork.com/checkout'
+        self._home_page = 'https://www.supremenewyork.com/shop/all'
+        self.recaptcha_url = 'https://checkmeout.pro/recaptcha'
         self.new_supreme_items = []
         self.driver = webdriver.Chrome()
 
         self.config_loader = ConfigLoader()
+
+
+    def recaptcha(self):
+        self.go_home_page()
+        self.driver.execute_script("window.open('{}');".format(self.recaptcha_url))
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        for i in range(5):
+            try:
+                self.driver.find_element_by_css_selector('button.g-recaptcha.button.special.big').click()
+            except:
+                pass
+        self.driver.switch_to.window(self.driver.window_handles[0])
 
     def shop(self, lst):
         self.set_new_supreme_items(lst)
