@@ -22,4 +22,4 @@ scrapy crawl supreme -o 'supreme.json'
 ## 1-click shop
 
 - follow `config.info_template.py` to create `config.info.py`.
-- `python -i main.py`
+- `python -i main.py test`
