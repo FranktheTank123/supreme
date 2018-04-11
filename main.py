@@ -3,9 +3,10 @@ from __future__ import print_function
 import json
 import time
 from tqdm import tqdm
+import random
 import sys
 
-
+from src.config_loader import ConfigLoader
 from src.supreme_items_monitor import SupremeItemsMonitor
 from src.supreme_shopper import SupremeShopper
 
@@ -24,27 +25,31 @@ def sleep(sec):
 
 if __name__ == '__main__':
     # load data
+    MAX_ITEM = 2
     datestr = '2018-04-11'
     with open('data/supreme_list_{}.json'.format(datestr), 'r') as f:
         inventory = json.load(f)
 
     # test or not
     if len(sys.argv)>1 and sys.argv[1] == 'test':
+        from config.info_template import infos
         sleep_time = 100
         name_list = ['nylon turnout jacket', 'tagless tees']  # test
-        del inventory['https://www.supremenewyork.com/shop/accessories/b82ba9vpq/jx7qm1hsc']
-        # inventory = {}
+        inventory = {}
     else:
+        from config.info import infos
         sleep_time = 1000
         name_list = ['cactus keychain', 'rimowa']
 
+
     # get refreshed items every 0.5 secs
-    ss = SupremeShopper()
+    config_loader = ConfigLoader(infos)
+    ss = SupremeShopper(config_loader)
     ss.recaptcha()
     si = SupremeItemsMonitor(inventory)
     new_inventory = si.monitor(sleep=0.5, max_count=-1)
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
-        sleep(10)
+        sleep(5)
     print("Found {} new items.".format(len(new_inventory)))
 
     # filter what we want
@@ -54,7 +59,11 @@ if __name__ == '__main__':
         print(name)
 
     # place order
-    lst = new_inventory.keys()
+    lst = random.sample(new_inventory.keys(), MAX_ITEM)
+    print("Randomly select {} items:".format(MAX_ITEM))
+    for l in lst:
+        print(new_inventory[l], ":", l)
+
     ss.shop(lst)
 
     sleep(sleep_time)

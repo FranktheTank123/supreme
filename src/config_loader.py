@@ -1,13 +1,7 @@
-try:
-    from config.info import infos
-except:
-    print("No info found. Use template.")
-    from config.info_template import infos
-
 import random
 
 class ConfigLoader(object):
-    def __init__(self, i=-1):
+    def __init__(self, infos, i=-1):
         try:
             self.info = infos[i]
         except:

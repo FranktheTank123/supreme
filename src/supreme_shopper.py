@@ -1,21 +1,18 @@
 from __future__ import print_function
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import time
 import sys
 
-from src.config_loader import ConfigLoader
-
 class SupremeShopper(object):
-    def __init__(self):
+    def __init__(self, config_loader):
         self._checkout_url = 'https://www.supremenewyork.com/checkout'
         self._home_page = 'https://www.supremenewyork.com/shop/all'
         self.recaptcha_url = 'https://checkmeout.pro/recaptcha'
         self.new_supreme_items = []
         self.driver = webdriver.Chrome()
 
-        self.config_loader = ConfigLoader()
+        self.config_loader = config_loader
 
 
     def recaptcha(self):
