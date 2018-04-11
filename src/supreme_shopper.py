@@ -1,15 +1,11 @@
 from __future__ import print_function
 
-try:
-    from config.info import *
-except:
-    print("No info found. Use template.")
-    from config.info_template import *
 
 from selenium import webdriver
 import time
 import sys
 
+from src.config_loader import ConfigLoader
 
 class SupremeShopper(object):
     def __init__(self):
@@ -18,21 +14,7 @@ class SupremeShopper(object):
         self.new_supreme_items = []
         self.driver = webdriver.Chrome()
 
-        self.order_dict = {
-            'billing_name': BILLING_NAME,
-            'email': EMAIL,
-            'tel': TEL,
-            'billing_address': BILLING_ADDRESS,
-            'billing_address_2': BILLING_ADDRESS_2,
-            'billing_zip': BILLING_ZIP,
-            # 'billing_city': BILLING_CITY,
-        }
-        self.cc_dict = {
-            'nlb': (NLB, True),
-            'month': (MONTH, False),
-            'year': (YEAR, False),
-            'rvv': (RVV, True)
-        }
+        self.config_loader = ConfigLoader()
 
     def shop(self, lst):
         self.set_new_supreme_items(lst)
@@ -78,15 +60,12 @@ class SupremeShopper(object):
             return # TODO: raise error here
 
         # fillout
-        for key, value in self.order_dict.iteritems():
+        for key, value in self.config_loader.order_dict.iteritems():
             elem = self.driver.find_element_by_name('order[{}]'.format(key))
-            elem.clear()
             elem.send_keys(value)
 
-        for key, (value, clear) in self.cc_dict.iteritems():
+        for key, value in self.config_loader.cc_dict.iteritems():
             elem = self.driver.find_element_by_name('credit_card[{}]'.format(key))
-            if clear:
-                elem.clear()
             elem.send_keys(value)
 
         self.driver.find_element_by_xpath(".//*[contains(text(), 'I have read and agree')]").click()

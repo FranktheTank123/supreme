@@ -1,15 +1,18 @@
-BILLING_NAME = 'James Bond'
-EMAIL = 'james.bond@gmail.com'
-TEL = '123-456-7890'
-BILLING_ADDRESS = '1 Times Square'
-BILLING_ADDRESS_2 = '321'
-BILLING_ZIP = '10036'
-BILLING_CITY = 'New York'
-BILLING_STATE = 'NY'
-BILLING_COUNTRY = 'USA'
+infos = [
+    {
+        'billing_name': 'James Bond',
+        'email': 'james.bond@gmail.com',
+        'tel': '123-456-7890',
+        'billing_address': '1 Times Square',
+        'billing_address_2': '321',
+        'billing_zip': '10036',
+        'billing_city': 'New York',
+        'billing_state': 'NY',
+        'billing_country': 'USA',
 
-
-NLB = '1234 5678 8901 2345'
-MONTH = '01'
-YEAR = '2026'
-RVV = '666'
+        'nlb': '1234 5678 8901 2345',
+        'month': '01',
+        'year': '2021',
+        'rvv': '666'
+    }
+]

@@ -2,8 +2,9 @@ from __future__ import print_function
 
 import json
 
-from supreme_shopper import SupremeShopper
-from supreme_items_monitor import SupremeItemsMonitor
+from src.supreme_items_monitor import SupremeItemsMonitor
+from src.supreme_shopper import SupremeShopper
+
 
 def contains(name, name_list):
     return any([True if x in name.lower() else False for x in name_list])

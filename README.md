@@ -22,5 +22,4 @@ scrapy crawl supreme -o 'supreme.json'
 ## 1-click shop
 
 - follow `config.info_template.py` to create `config.info.py`.
-- uncomment `# ss.monitor_new_items()` in `shopper.py`
-- `python -i shopper.py`
+- `python -i main.py`

@@ -1,15 +1,18 @@
-BILLING_NAME = 'Tianyi Xia'
-EMAIL = 'tyxia2004@gmail.com'
-TEL = '614-753-9173'
-BILLING_ADDRESS = '701 China Basin St.'
-BILLING_ADDRESS_2 = '109'
-BILLING_ZIP = '94158'
-BILLING_CITY = 'San Francisco'
-BILLING_STATE = 'CA'
-BILLING_COUNTRY = 'USA'
+infos = [
+    {
+        'billing_name': 'Tianyi Xia',
+        'email': 'tyxia2004@gmail.com',
+        'tel': '614-753-9173',
+        'billing_address': '701 China Basin St.',
+        'billing_address_2': '109',
+        'billing_zip': '94158',
+        'billing_city': 'San Francisco',
+        'billing_state': 'CA',
+        'billing_country': 'USA',
 
-
-NLB = '5189 4100 1237 6085'
-MONTH = '03'
-YEAR = '2021'
-RVV = '432'
+        'nlb': '5189 4100 1237 6085',
+        'month': '03',
+        'year': '2021',
+        'rvv': '432'
+    }
+]
