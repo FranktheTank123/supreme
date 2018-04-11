@@ -13,6 +13,10 @@ except:
 	from config.info_template import *
 
 class SupremeItems(object):
+	def __init__(self):
+		self.last_all_supreme_items = []
+		self.new_supreme_items = []
+
 	@staticmethod
 	def get_all_supreme_items():
 		req = requests.get('http://www.supremenewyork.com/shop/all')
@@ -27,11 +31,25 @@ class SupremeItems(object):
 		return links
 
 
+	def monitor(self, sleep=1, max_count=5):
+		count = 0
+		current_all_supreme_items = self.get_all_supreme_items()
+		
+		while (len(self.last_all_supreme_items)==0 or len(current_all_supreme_items) == len(self.last_all_supreme_items)) and count<max_count:
+			time.sleep(sleep)
+			self.last_all_supreme_items = current_all_supreme_items
+			current_all_supreme_items = self.get_all_supreme_items()
+			count += 1
+			print("count: {} out of {}".format(count, max_count))
+
+		self.new_supreme_items = list(set(current_all_supreme_items) - set(self.last_all_supreme_items))
+		self.last_all_supreme_items = current_all_supreme_items
+
 class SupremeShopper(object):
 	def __init__(self):
 		self._checkout_url = 'https://www.supremenewyork.com/checkout'
 		self._home_page = 'http://www.supremenewyork.com/shop/all'
-
+		self.new_supreme_items = []
 		self.driver = webdriver.Chrome()
 
 		self.order_dict = {
@@ -49,26 +67,9 @@ class SupremeShopper(object):
 			'year': (YEAR, False),
 			'rvv': (RVV, True)
 		}
-		self.supreme_items = SupremeItems()
-		self.last_all_supreme_items = []
-		self.new_supreme_items = [
-			'http://www.supremenewyork.com/shop/pants/zix4b8kaf/hbs9kyrg0',
-			'http://www.supremenewyork.com/shop/accessories/jy1cn3sie/eq35gubw7'
-		]
 
-	def monitor_new_items(self, sleep=2, max_count=1):
-		count = 0
-		current_all_supreme_items = self.supreme_items.get_all_supreme_items()
-		
-		while (len(self.last_all_supreme_items)==0 or len(current_all_supreme_items) == len(self.last_all_supreme_items)) and count<max_count:
-			time.sleep(sleep)
-			self.last_all_supreme_items = current_all_supreme_items
-			current_all_supreme_items = self.supreme_items.get_all_supreme_items()
-			count += 1
-			print("count: {} out of {}".format(count, max_count))
-
-		self.new_supreme_items = list(set(current_all_supreme_items) - set(self.last_all_supreme_items))
-		self.last_all_supreme_items = current_all_supreme_items
+	def set_new_supreme_items(self, new_supreme_items):
+		self.new_supreme_items = new_supreme_items
 
 	@property
 	def checkout(self):
@@ -144,10 +145,16 @@ class SupremeShopper(object):
 				pass
 
 if __name__ == '__main__':
+	si = SupremeItems()
+	si.monitor()
+	lst = si.new_supreme_items
+	lst = [
+		'http://www.supremenewyork.com/shop/pants/zix4b8kaf/hbs9kyrg0',
+		'http://www.supremenewyork.com/shop/accessories/jy1cn3sie/eq35gubw7'
+	]
+
 	ss = SupremeShopper()
-	ss.go_home_page
-	# ss.monitor_new_items()
+	ss.set_new_supreme_items(lst)
 
 	ss.add_all_new_items
-	time.sleep(0.5)
 	ss.checkout
