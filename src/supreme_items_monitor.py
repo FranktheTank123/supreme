@@ -12,7 +12,7 @@ SUPREME_SHOP_ALL = '/shop/all'
 
 
 def item_name_getter(link):
-    req = requests.get(link)
+    req = requests.get(link,  headers={"content-type":"text"})
     soup = BeautifulSoup(req.text)
     item_name = soup.find('title').text
     return {link: item_name}
@@ -23,7 +23,7 @@ class SupremeItemsMonitor(object):
 
     @staticmethod
     def get_all_supreme_links():
-        req = requests.get(SUPREME_HOME + SUPREME_SHOP_ALL)
+        req = requests.get(SUPREME_HOME + SUPREME_SHOP_ALL,  headers={"content-type":"text"})
         soup = BeautifulSoup(req.text)
         all_href = soup.findAll('a', href=True)
         links = []
@@ -40,7 +40,7 @@ class SupremeItemsMonitor(object):
 
         new_inventory = {}
         for link in tqdm(links, total=len(links), desc='Inventory'):
-            req = requests.get(link)
+            req = requests.get(link,  headers={"content-type":"text"})
             soup = BeautifulSoup(req.text)
             item_name = soup.find('title').text
             new_inventory[link] = item_name
@@ -74,7 +74,7 @@ class SupremeItemsMonitor(object):
         count = 0
         current_links = self.get_all_supreme_links()
 
-        while set(current_links) == set(self.get_inventory_links) and count < max_count:
+        while set(current_links) == set(self.get_inventory_links):
             if max_count >= 0 and count >= max_count:
                 break
             time.sleep(sleep)

@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-
 from selenium import webdriver
 import time
 import sys
@@ -38,7 +37,7 @@ class SupremeShopper(object):
         Go to checkout page, try n times. Will fail if nothing has been add to cart
         """
         self.driver.get(self._checkout_url)
-        if self.driver.current_url != self._checkout_url:
+        if self.driver.current_url != self._checkout_url and n>=0:
             print("Go to checkout failed. Try {} more times in {} seconds".format(n, sleep))
             time.sleep(sleep)
             self.go_to_checkout(n=n-1)
@@ -61,12 +60,19 @@ class SupremeShopper(object):
 
         # fillout
         for key, value in self.config_loader.order_dict.iteritems():
-            elem = self.driver.find_element_by_name('order[{}]'.format(key))
-            elem.send_keys(value)
+            time.sleep(0.2)
+            try:
+                elem = self.driver.find_element_by_name('order[{}]'.format(key))
+                elem.send_keys(value)
+            except:
+                pass
 
         for key, value in self.config_loader.cc_dict.iteritems():
-            elem = self.driver.find_element_by_name('credit_card[{}]'.format(key))
-            elem.send_keys(value)
+            try:
+                elem = self.driver.find_element_by_name('credit_card[{}]'.format(key))
+                elem.send_keys(value)
+            except:
+                pass
 
         self.driver.find_element_by_xpath(".//*[contains(text(), 'I have read and agree')]").click()
 
