@@ -8,7 +8,7 @@ from src.config_loader import ConfigLoader
 
 class SupremeShopper(object):
     def __init__(self):
-        self._checkout_url = 'https://www.supremenewyork.com/checkout'
+        self._checkout_url = 'http://www.supremenewyork.com/checkout'
         self._home_page = 'http://www.supremenewyork.com/shop/all'
         self.new_supreme_items = []
         self.driver = webdriver.Chrome()
@@ -59,17 +59,16 @@ class SupremeShopper(object):
             return # TODO: raise error here
 
         # fillout
-        for key, value in self.config_loader.order_dict.iteritems():
-            time.sleep(0.2)
+        for key, value in self.config_loader.order_dict:
             try:
-                elem = self.driver.find_element_by_name('order[{}]'.format(key))
+                elem = self.driver.find_element_by_xpath(".//input[@name='order[{}]']".format(key))
                 elem.send_keys(value)
             except:
                 pass
 
-        for key, value in self.config_loader.cc_dict.iteritems():
+        for key, value in self.config_loader.cc_dict:
             try:
-                elem = self.driver.find_element_by_name('credit_card[{}]'.format(key))
+                elem = self.driver.find_element_by_xpath(".//input[@name='credit_card[{}]']".format(key))
                 elem.send_keys(value)
             except:
                 pass

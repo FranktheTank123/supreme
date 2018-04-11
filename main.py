@@ -22,7 +22,7 @@ if __name__ == '__main__':
         inventory = json.load(f)
 
     # test or not
-    if sys.argv[1] == 'test':
+    if len(sys.argv)>1 and sys.argv[1] == 'test':
         sleep_time = 100
         name_list = ['nylon turnout jacket', 'tagless tees']  # test
         del inventory['https://www.supremenewyork.com/shop/accessories/b82ba9vpq/jx7qm1hsc']
@@ -47,4 +47,4 @@ if __name__ == '__main__':
     ss = SupremeShopper()
     ss.shop(lst)
 
-    time.sleep(100)
+    time.sleep(sleep_time)
