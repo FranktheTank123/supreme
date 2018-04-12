@@ -35,29 +35,39 @@ if __name__ == '__main__':
     if len(sys.argv)>1 and sys.argv[1] == 'test':
         from config.info_template import infos
         sleep_time = 10
-        name_list = [['nylon','turnout', 'jacket', 'olive'], ['tagless, tees']]  # test
+        name_list = [['nylon','turnout', 'jacket', 'olive'], ['tagless', 'tees']]  # test
         inventory = {}
     else:
         from config.info import infos
         sleep_time = 1000
         name_list = [['cactus', 'keychain'], ['rimowa', 'red']]
+        inventory = {}
 
 
-    # get refreshed items every 0.5 secs
     config_loader = ConfigLoader(infos)
+
     ss = SupremeShopper(config_loader)
     ss.recaptcha()
-    si = SupremeItemsMonitor(inventory)
-    new_inventory = si.monitor(sleep=0.5, max_count=-1)
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
         sleep(5)
-    print("Found {} new items.".format(len(new_inventory)))
 
-    # filter what we want
-    new_inventory = filter_names(new_inventory, name_list)
-    print("After filtering, we have {} new item, they are:".format(len(new_inventory)))
-    for _, name in new_inventory.iteritems():
-        print(name.encode("utf-8"))
+    si = SupremeItemsMonitor(inventory)
+    while True:
+        new_inventory = si.monitor(sleep=0, max_count=0)
+        print("Found {} new items.".format(len(new_inventory)))
+
+        # filter what we want
+        new_inventory = filter_names(new_inventory, name_list)
+
+        if not len(new_inventory) == 0:
+            print("After filtering, we have {} new item, they are:".format(len(new_inventory)))
+            for _, name in new_inventory.iteritems():
+                print(name.encode("utf-8"))
+            break
+        else:
+            print("No eligible items found, try in 1 sec")
+            time.sleep(1)
+        si = SupremeItemsMonitor(si.inventory)
 
     # place order
     lst = random.sample(new_inventory.keys(), min(MAX_ITEM, len(new_inventory.keys())))
