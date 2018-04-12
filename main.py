@@ -12,10 +12,11 @@ from src.supreme_shopper import SupremeShopper
 
 
 def contains(name, name_list):
-    return any([True if x in name.lower() else False for x in name_list])
+    return any([all([y.lower() in name for y in x]) for x in name_list])
+    # return any([True if x in name.lower() else False for x in name_list])
 
 def filter_names(new_inventory, name_list):
-    return {k: v for k, v in new_inventory.iteritems() if contains(v, name_list)}
+    return {k: v for k, v in new_inventory.iteritems() if contains(v.lower(), name_list)}
 
 def sleep(sec):
     sec = int(sec)
@@ -34,12 +35,12 @@ if __name__ == '__main__':
     if len(sys.argv)>1 and sys.argv[1] == 'test':
         from config.info_template import infos
         sleep_time = 10
-        name_list = ['nylon turnout jacket', 'tagless tees']  # test
+        name_list = [['nylon','turnout', 'jacket', 'olive'], ['tagless, tees']]  # test
         inventory = {}
     else:
         from config.info import infos
         sleep_time = 1000
-        name_list = ['cactus keychain', 'rimowa']
+        name_list = [['cactus', 'keychain'], ['rimowa', 'red']]
 
 
     # get refreshed items every 0.5 secs
