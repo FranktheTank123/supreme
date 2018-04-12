@@ -1,5 +1,6 @@
 config/info.py
 env
+logs/*
 #data
 
 *pyc

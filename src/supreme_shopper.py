@@ -13,6 +13,7 @@ class SupremeShopper(object):
         self.driver = webdriver.Chrome()
 
         self.config_loader = config_loader
+        self.items_in_cart = []
 
 
     def recaptcha(self):
@@ -56,14 +57,15 @@ class SupremeShopper(object):
     def go_to_item(self, i=0):
         self.driver.get(self.new_supreme_items[i])
 
+    def is_in_cart(self):
+        return len(self.driver.find_elements_by_css_selector('b.button.in-cart')) > 0
+
     def add_item(self):
         self.driver.find_element_by_name('commit').click() # add to cart
-        # try:
-        #     self.driver.find_element_by_class_name('delete')
-        # except:
-        #     return
-        # else:
-        #     self.driver.find_element_by_name('commit').click()
+
+    def check_items_added(self):
+        if self.is_in_cart():
+            self.items_in_cart.append(self.driver.title)
 
     def fill_checkout_info(self):
         if self.driver.current_url != self._checkout_url:
@@ -102,8 +104,13 @@ class SupremeShopper(object):
                 time.sleep(0.5)
                 self.add_item()
                 time.sleep(0.5)
+                self.check_items_added()
             except:
                 pass
+
+        print("All items added:")
+        for item in self.items_in_cart:
+            print(item.encode("utf-8"))
 
 if __name__ == '__main__':
     if sys.argv[1] is not None:

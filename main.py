@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # test or not
     if len(sys.argv)>1 and sys.argv[1] == 'test':
         from config.info_template import infos
-        sleep_time = 100
+        sleep_time = 10
         name_list = ['nylon turnout jacket', 'tagless tees']  # test
         inventory = {}
     else:
@@ -56,13 +56,13 @@ if __name__ == '__main__':
     new_inventory = filter_names(new_inventory, name_list)
     print("After filtering, we have {} new item, they are:".format(len(new_inventory)))
     for _, name in new_inventory.iteritems():
-        print(name)
+        print(name.encode("utf-8"))
 
     # place order
     lst = random.sample(new_inventory.keys(), MAX_ITEM)
     print("Randomly select {} items:".format(MAX_ITEM))
     for l in lst:
-        print(new_inventory[l], ":", l)
+        print(new_inventory[l].encode("utf-8"), ":", l)
 
     ss.shop(lst)
 
