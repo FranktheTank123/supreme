@@ -60,7 +60,7 @@ if __name__ == '__main__':
         print(name.encode("utf-8"))
 
     # place order
-    lst = random.sample(new_inventory.keys(), MAX_ITEM)
+    lst = random.sample(new_inventory.keys(), min(MAX_ITEM, len(new_inventory.keys())))
     print("Randomly select {} items:".format(MAX_ITEM))
     for l in lst:
         print(new_inventory[l].encode("utf-8"), ":", l)
