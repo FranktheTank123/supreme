@@ -14,10 +14,6 @@ pip install -r requirements.txt
 cp chromedriver env/bin # copy chrome driver for Selenium
 ```
 
-## Daily Data Crawl
-```bash
-scrapy crawl supreme -o 'supreme.json'
-```
 
 ## 1-click shop
 
