@@ -1,4 +1,4 @@
-config/info.py
+config/info.yaml
 env
 logs/*
 #data

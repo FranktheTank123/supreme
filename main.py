@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # load data
     MAX_ITEM = 2
     datestr = '2018-04-11'
-    
+
     # test or not
     if len(sys.argv)>1 and sys.argv[1] == 'test':
         from config.info_template import infos

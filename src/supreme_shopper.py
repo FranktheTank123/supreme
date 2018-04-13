@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 
 from selenium import webdriver
 import time
@@ -72,19 +72,13 @@ class SupremeShopper(object):
             return # TODO: raise error here
 
         # fillout
-        for key, value in self.config_loader.order_dict:
-            try:
-                elem = self.driver.find_element_by_xpath(".//input[@name='order[{}]']".format(key))
-                elem.send_keys(value)
-            except:
-                pass
+        for key, value in self.config_loader.order_info:
+            elem = self.driver.find_element_by_xpath(".//input[@name='order[{}]']".format(key))
+            elem.send_keys(value)
 
-        for key, value in self.config_loader.cc_dict:
-            try:
-                elem = self.driver.find_element_by_xpath(".//input[@name='credit_card[{}]']".format(key))
-                elem.send_keys(value)
-            except:
-                pass
+        for key, value in self.config_loader.cc_info:
+            elem = self.driver.find_element_by_xpath(".//select[@name='credit_card[{}]']".format(key))
+            elem.send_keys(value)
 
         self.driver.find_element_by_xpath(".//*[contains(text(), 'I have read and agree')]").click()
 

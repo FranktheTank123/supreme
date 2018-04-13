@@ -11,7 +11,7 @@ virtualenv env
 source env/bin/activate
 pip install -r requirements.txt
 
-cp chromedriver env/bin # copy chrome driver for Selenium
+cp chrome/chromedriver env/bin  # copy chrome driver for Selenium
 ```
 
 
