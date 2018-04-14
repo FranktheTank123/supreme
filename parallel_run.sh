@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 total_run=$1
-test=$2
+if [ -z "$2" ] || [ $2 != "test" ]; then
+    TEST=""
+else
+    TEST="--test"
+fi
 
-DATE=`date '+%Y-%m-%d_%H-%M-%S'`
-mkdir -p logs
-
+python main.py $TEST -m monitor&
 for i in `seq 1 $total_run`;
 do
-    python main.py $2  2>&1 > logs/${DATE}_run_${i}.log &
+    python main.py $TEST -m shop&
 done
-
-echo Launched ${total_run} jobs.

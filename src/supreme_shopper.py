@@ -37,7 +37,6 @@ class SupremeShopper(object):
 
     def run(self):  # for main to call
         self.set_up_driver()
-        self.set_up_recaptcha()
         self.wait_then_process()
         self.shop()
 

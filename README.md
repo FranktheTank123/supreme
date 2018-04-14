@@ -17,9 +17,9 @@ cp chrome/chromedriver env/bin  # copy chrome driver for Selenium
 
 ## 1-click shop
 
-- follow `config.info_template.py` to create `config.info.py`.
-- for testing: `python -i main.py test`
-- for real: `python -i main.py`, make sure run at least 1min before the drop, so that you can handle `reCAPTCHA` yourself
+- follow `config.info_template.yaml` to create `config.info.yaml`.
+- for testing: `python main.py --test`
+- for real: `python main.py`, make sure run at least 1min before the drop, so that you can handle `reCAPTCHA` yourself
 
 ## parallel runs
 

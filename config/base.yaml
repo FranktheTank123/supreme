@@ -1,0 +1,18 @@
+real:
+  category: []        # category interested
+  keywords: []        # all pattens need to match
+  size: []            # one or many of ['Small', 'Medium', 'Large', 'XLarge'], order matters
+
+  # DON'T TOUCH BELOW
+  autofill_on: true   # true or false
+  refresh_time: 0.5   # in seconds
+  recaptcha: true     # if you want to clear recaptcha before the drop
+
+test:
+  category: [jackets]
+  keywords: []
+  size: []
+
+  autofill_on: true
+  refresh_time: 1
+  recaptcha: true
