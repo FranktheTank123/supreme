@@ -26,7 +26,7 @@ class AutofillActivator(object):
     def set_driver(self, driver):
         self.driver = driver
 
-    @timeit # benchmark 9.5s
+    # @timeit # benchmark 9.5s
     def dump_info(self, info):
         if self.driver is None:
             print('No driver found.')
