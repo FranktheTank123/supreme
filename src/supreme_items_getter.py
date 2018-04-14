@@ -5,6 +5,11 @@ import multiprocessing as mp
 import re
 import requests
 
+from src.utils.logger import get_logger
+from src.utils.utils import timeit
+
+logger = get_logger()
+
 SUPREME_HOME = 'https://www.supremenewyork.com'
 SUPREME_SHOP_ALL = '/shop/all'
 HEADERs = {"content-type": "text"}  # request headers
@@ -33,6 +38,7 @@ class SupremeItemsGetter(object):
             if _href.startswith('/shop') and len(_href.split('/') ) == 5:
                 # we want _href look like: /shop/pants/zix4b8kaf/hbs9kyrg0
                 links.append(SUPREME_HOME + _href)
+        logger.info('Found {} linkes from shop/all'.format(len(links)))
         return links
 
     @staticmethod

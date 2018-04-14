@@ -2,13 +2,17 @@ from __future__ import print_function, absolute_import
 
 import time
 
+from src.utils.logger import get_logger
+
+logger = get_logger()
+
 def timeit(method):
     def timed(*args, **kw):
-        print('{} start.'.format(method.__name__))
+        logger.info('{} start.'.format(method.__name__))
         ts = time.time()
         result = method(*args, **kw)
         te = time.time()
-        print('{} end, takes  {:.4f}s.'.format(method.__name__, (te - ts)))
+        logger.info('{} end, takes  {:.4f}s.'.format(method.__name__, (te - ts)))
         return result
     return timed
 

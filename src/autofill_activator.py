@@ -4,7 +4,10 @@ import yaml
 import time
 from selenium.webdriver.chrome.options import Options
 
-from src.utils.utils import timeit
+from src.utils.logger import get_logger
+# from src.utils.utils import timeit
+
+logger = get_logger()
 
 MAPPING_FILE = 'config/checkout_mapping.yaml'
 
@@ -29,7 +32,7 @@ class AutofillActivator(object):
     # @timeit # benchmark 9.5s
     def dump_info(self, info):
         if self.driver is None:
-            print('No driver found.')
+            logger.warn('No web driver found.')
             return
 
         self.driver.get(self.extension_url)

@@ -4,10 +4,16 @@ import json
 import time
 from selenium import webdriver
 
+from src.autofill_activator import AutofillActivator
+from src.utils.logger import get_logger
 from src.utils.utils import timeit
 
+logger = get_logger()
+
+
 class SupremeShopper(object):
-    def __init__(self, config_loader, autofill_on=True, keywords=[], size=[]):
+    def __init__(self, config_loader, autofill_on=True,
+                 keywords=[], size=[], refresh_time=1., recaptcha=True):
         # constants
         self._checkout_url = 'https://www.supremenewyork.com/checkout'
         self._home_page = 'https://www.supremenewyork.com/shop/all'
@@ -26,22 +32,36 @@ class SupremeShopper(object):
         self.current_items_in_cart = 0
         self.items_in_cart = []
 
+        self.refresh_time = refresh_time
+        self.recaptcha = recaptcha
+
+    def run(self):  # for main to call
+        self.set_up_driver()
+        self.set_up_recaptcha()
+        self.wait_then_process()
+        self.shop()
+
     def set_up_driver(self):
         if self.autofill_on:
+            logger.info('Start with Autofill, this may take up to 10 secs...')
             autofill_activator = AutofillActivator()
             chrome_options = autofill_activator.get_options
             self.driver = webdriver.Chrome(chrome_options=chrome_options)
-            autofill_activator.set_driver(ss.driver)
-            autofill_activator.dump_info(cl.info)
+            autofill_activator.set_driver(self.driver)
+            autofill_activator.dump_info(self.config_loader.info)
+            logger.info('Autofill setting done, going back to home page.')
         else:
             self.driver = webdriver.Chrome(chrome_options=None)
         self.driver.get(self._home_page)
 
-    def set_up_recaptcha(self):
+        if self.recaptcha:
+            self._set_up_recaptcha()
+
+    def _set_up_recaptcha(self):
         """
         Go to trigger recaptcha.
         """
-
+        logger.warn('Setting ReCaptcha, make sure you solve any problems if shown.')
         self.driver.execute_script("window.open('{}');".format(self._recaptcha_url))
         self.driver.switch_to.window(self.driver.window_handles[1])
         for i in range(5):
@@ -56,17 +76,16 @@ class SupremeShopper(object):
         new_items = self._wait_for_list()
         self.candidate_items = self.filter_names(new_items, self.keywords)
 
-    @staticmethod
-    def _wait_for_list():
-        refresh_time = 1
+    def _wait_for_list(self):
+        logger.info('Waiting for monitor to pass new items.')
         while True:
-            time.sleep(refresh_time)
+            time.sleep(self.refresh_time)
             try:
                 with open('data/_new_inventory.json', 'r') as f:
                     new_inventory = json.load(f)
                     return new_inventory
             except:
-                print('Load new inventory failed, try again in {} seconds.'.format(refresh_time))
+                logger.warn('Load new inventory failed, will check again in {} seconds.'.format(self.refresh_time))
 
     @staticmethod
     def filter_names(new_inventory, keywords):
@@ -78,7 +97,11 @@ class SupremeShopper(object):
     def shop(self):
         self.add_items()
         time.sleep(0.3)
-        self.checkout()
+        if self.current_items_in_cart:
+            logger.info('Ready to checkout.')
+            self.checkout()
+        else:
+            logger.warn('Nothing in cart, cannot checkout.')
 
     def add_items(self):
         for url, name in self.candidate_items.iteritems():
@@ -86,7 +109,7 @@ class SupremeShopper(object):
                 try:
                     self._add_item(url)
                     self.current_items_in_cart += 1
-                    print('Added: {}'.format(name))
+                    logger.info('Added item: {}'.format(name))
                 except:
                     pass
         return
@@ -146,14 +169,12 @@ class SupremeShopper(object):
 
 
 if __name__ == '__main__':
-    from src.autofill_activator import AutofillActivator
     from src.config_loader import ConfigLoader
 
     # warm up the environment
     cl = ConfigLoader(test=True)
-    ss = SupremeShopper(cl, autofill_on=True)
+    ss = SupremeShopper(cl, autofill_on=True, refresh_time=0.5, recaptcha=False)
     ss.set_up_driver()
-    # ss.set_up_recaptcha()
 
     ss.wait_then_process()
     # ss.candidate_items = {

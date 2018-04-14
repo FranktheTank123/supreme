@@ -4,15 +4,22 @@ import os
 import random
 import yaml
 
+from src.utils.logger import get_logger
+from src.utils.utils import timeit
+
+logger = get_logger()
+
 class ConfigLoader(object):
     def __init__(self, test=False):
         if test or not os.path.isfile('config/info.yaml'):
             with open('config/info_template.yaml', 'r') as f:
                 infos = yaml.load(f)
 
+            logger.debug('Testing mode, using template data.')
         else:
             with open('config/info.yaml', 'r') as f:
                 infos = yaml.load(f)
+            logger.warn('Not in test mode. Use true data. Make sure this is what you want.')
 
         accout = random.choice(infos.keys())
         self._info = infos[accout]
