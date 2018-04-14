@@ -7,7 +7,7 @@ import random
 import sys
 
 from src.config_loader import ConfigLoader
-from src.supreme_items_monitor import SupremeItemsMonitor
+from src.supreme_items_getter import SupremeItemsMonitor
 from src.supreme_shopper import SupremeShopper
 
 

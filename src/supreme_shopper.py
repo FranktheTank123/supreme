@@ -6,6 +6,8 @@ import sys
 
 class SupremeShopper(object):
     def __init__(self, config_loader):
+        # self.size = size #  ['Small', 'Medium', 'Large', 'XLarge']
+
         self._checkout_url = 'https://www.supremenewyork.com/checkout'
         self._home_page = 'https://www.supremenewyork.com/shop/all'
         self.recaptcha_url = 'https://checkmeout.pro/recaptcha'
