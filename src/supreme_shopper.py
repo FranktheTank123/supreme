@@ -140,7 +140,14 @@ class SupremeShopper(object):
 
     @timeit  # benchmark: with autofill: 2s, without autofill: 8s
     def checkout(self):
-        self.driver.get(self._checkout_url)  # this takes ~1s
+        n=100
+        while n:
+            try:
+                self.driver.get(self._checkout_url)  # this takes ~1s
+                break
+            except:
+                n -= 1
+
         if not self.autofill_on:
             self._fill_checkout_info()
         self._click_agree_terms()
