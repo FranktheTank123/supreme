@@ -150,7 +150,14 @@ class SupremeShopper(object):
 
         if not self.autofill_on:
             self._fill_checkout_info()
-        self._click_agree_terms()
+
+        n=100
+        while n:
+            try:
+                self._click_agree_terms()
+                break
+            except:
+                n -= 1
         self._click_process_payment()
 
     def _fill_checkout_info(self):
